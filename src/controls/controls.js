@@ -12,6 +12,8 @@ type Props = {
     fontSize: number,
     horizontalMargin: number,
     verticalMargin: number,
+    headerFont: string,
+    bodyFont: string,
     onChange: (key: string, value: any) => void,
     stoppedControls: string[],
     onToggleActiveState: (name: string, newActiveState: boolean) => void,
@@ -23,7 +25,7 @@ export class Controls extends React.Component<Props> {
             <div className={styles.controls}>
                 <Control
                     name="interval"
-                    label="Interval"
+                    label="Speed"
                     onToggleActiveState={this.handleToggleActiveState}
                     isStopped={this.props.stoppedControls.includes('interval')}
                     onChange={this.handleChange}
@@ -91,6 +93,24 @@ export class Controls extends React.Component<Props> {
                     onChange={this.handleChange}
                     value={this.props.horizontalMargin}
                     isPixelValue={true}
+                />
+                <Control
+                    name="headerFont"
+                    label="Header font"
+                    onToggleActiveState={this.handleToggleActiveState}
+                    isStopped={this.props.stoppedControls.includes(
+                        'headerFont'
+                    )}
+                    onChange={this.handleChange}
+                    value={this.props.headerFont}
+                />
+                <Control
+                    name="bodyFont"
+                    label="Body font"
+                    onToggleActiveState={this.handleToggleActiveState}
+                    isStopped={this.props.stoppedControls.includes('bodyFont')}
+                    onChange={this.handleChange}
+                    value={this.props.bodyFont}
                 />
             </div>
         );

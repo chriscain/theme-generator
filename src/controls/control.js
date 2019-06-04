@@ -37,6 +37,7 @@ export class Control extends React.Component<Props, State> {
                 <div className={styles['input-container']}>
                     {this.props.isColorPicker ? <span>#</span> : undefined}
                     <input
+                        style={{width: 80}}
                         onFocus={this.handleFocus}
                         name={this.props.name}
                         value={this.props.value}

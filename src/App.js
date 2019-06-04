@@ -13,7 +13,12 @@ type State = {
     textColor: string,
     backgroundColor: string,
     horizontalMargin: number,
+    verticalMargin: number,
+    headerFont: string,
+    bodyFont: string,
     stoppedControls: string[],
+    isLoading: boolean,
+    fonts: Object[],
 };
 
 export class App extends React.Component<Props, State> {
@@ -33,12 +38,34 @@ export class App extends React.Component<Props, State> {
             textColor: generateRandomHex(),
             horizontalMargin: generateRandomNumberInRange(32, 128),
             verticalMargin: 32,
+            headerFont: generateRandomFont(),
+            bodyFont: generateRandomFont(),
             stoppedControls: [],
+            isLoading: false,
+            fonts: [],
         };
     }
 
     componentDidMount() {
         this.interval = setInterval(this.changeStuff, this.state.interval);
+
+        // fetch(
+        //     'https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBjnzN-_nm1saTaG_pXEDx3TFlSAXESdt8'
+        // )
+        //     .then(function(response) {
+        //         return response.json();
+        //     })
+        //     .then(
+        //         (response: any) => {
+        //             this.setState({
+        //                 isLoading: false,
+        //                 fonts: response.items,
+        //             });
+        //         },
+        //         err => {
+        //             console.log(err);
+        //         }
+        //     );
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
@@ -53,6 +80,10 @@ export class App extends React.Component<Props, State> {
     }
 
     render() {
+        if (this.state.isLoading) {
+            return null;
+        }
+
         return (
             <div className={styles.container}>
                 <Content
@@ -71,6 +102,8 @@ export class App extends React.Component<Props, State> {
                     textColor={this.state.textColor}
                     horizontalMargin={this.state.horizontalMargin}
                     verticalMargin={this.state.verticalMargin}
+                    headerFont={this.state.headerFont}
+                    bodyFont={this.state.bodyFont}
                     onChange={this.handleChange}
                     onToggleActiveState={this.handleToggleActiveState}
                     stoppedControls={this.state.stoppedControls}
@@ -113,6 +146,12 @@ export class App extends React.Component<Props, State> {
             )
                 ? this.state.verticalMargin
                 : 32,
+            headerFont: this.state.stoppedControls.includes('headerFont')
+                ? this.state.headerFont
+                : generateRandomFont(),
+            bodyFont: this.state.stoppedControls.includes('bodyFont')
+                ? this.state.bodyFont
+                : generateRandomFont(),
         });
     };
 
@@ -132,6 +171,36 @@ export class App extends React.Component<Props, State> {
         return this.state.stoppedControls.includes('name');
     }
 }
+
+function generateRandomFont() {
+    return generateRandomHex();
+}
+
+// function generate(fonts) {
+//     console.lo;
+//     this.headingFont = this.fontFilter(this.headingCategory);
+//     this.bodyFont = this.fontFilter(this.bodyCategory);
+
+//     const googleUrl = 'https://fonts.google.com/specimen/';
+//     this.headingFontUrl =
+//         googleUrl + this.headingFont.family.replace(/ /g, '+');
+//     this.bodyFontUrl = googleUrl + this.bodyFont.family.replace(/ /g, '+');
+//     if (combinedFont == null) {
+//         const link = document.createElement('link');
+//         link.id = 'combined-font';
+//         link.href = `https://fonts.googleapis.com/css?family=${this.headingFont.family.replace(
+//             / /g,
+//             '+'
+//         )}|${this.bodyFont.family.replace(/ /g, '+')}`;
+//         link.rel = 'stylesheet';
+//         document.head.appendChild(link);
+//     } else {
+//         combinedFont.href = `https://fonts.googleapis.com/css?family=${this.headingFont.family.replace(
+//             / /g,
+//             '+'
+//         )}|${this.bodyFont.family.replace(/ /g, '+')}`;
+//     }
+// }
 
 function generateRandomHex() {
     return Math.floor(Math.random() * 16777215).toString(16);

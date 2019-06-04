@@ -126,6 +126,66 @@ export class Content extends React.Component<Props> {
                         happen, can trip you up in something that would
                         otherwise feel natural.
                     </p>
+                    <p style={textStyles}>
+                        {' '}
+                        Needless to say, I blew it. Although I had fully
+                        committed the piece to memory at that point, I couldn’t,
+                        for the life of me, recall a single word. Like an
+                        amateur, I kept stuttering, stumbling, and looking down
+                        at my book. It was a brutal end to an otherwise stellar
+                        season.
+                    </p>
+                    <p style={textStyles}>
+                        {' '}
+                        As humiliating as the experience was, I took some small
+                        amount of comfort (and still do) in knowing that some
+                        version of this happens to everyone. Choking under
+                        pressure is a widely studied phenomenon, one that
+                        afflicts speakers, athletes, performers,
+                        test-takers — really, anyone who’s in a high-pressure
+                        situation.
+                    </p>{' '}
+                    <p style={textStyles}>
+                        The process is physical as much as it is mental. Anxiety
+                        causes the body to release adrenaline, which acts as a
+                        powerful stimulant, and endorphins, which act as a mild
+                        opiate. “When you’re anxious, you’re also basically a
+                        little high and a little stoned,” says Aimee Daramus, a
+                        licensed clinical psychologist based in Chicago.
+                        High-stakes situations can also cause neurological
+                        reactions like distraction, memory loss, and loss of
+                        motor function, all of which can impact performance.
+                    </p>
+                    <p style={textStyles}>
+                        {' '}
+                        Needless to say, I blew it. Although I had fully
+                        committed the piece to memory at that point, I couldn’t,
+                        for the life of me, recall a single word. Like an
+                        amateur, I kept stuttering, stumbling, and looking down
+                        at my book. It was a brutal end to an otherwise stellar
+                        season.
+                    </p>
+                    <p style={textStyles}>
+                        {' '}
+                        As humiliating as the experience was, I took some small
+                        amount of comfort (and still do) in knowing that some
+                        version of this happens to everyone. Choking under
+                        pressure is a widely studied phenomenon, one that
+                        afflicts speakers, athletes, performers,
+                        test-takers — really, anyone who’s in a high-pressure
+                        situation.
+                    </p>{' '}
+                    <p style={textStyles}>
+                        The process is physical as much as it is mental. Anxiety
+                        causes the body to release adrenaline, which acts as a
+                        powerful stimulant, and endorphins, which act as a mild
+                        opiate. “When you’re anxious, you’re also basically a
+                        little high and a little stoned,” says Aimee Daramus, a
+                        licensed clinical psychologist based in Chicago.
+                        High-stakes situations can also cause neurological
+                        reactions like distraction, memory loss, and loss of
+                        motor function, all of which can impact performance.
+                    </p>
                 </div>
             </div>
         );
