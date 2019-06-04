@@ -1,5 +1,6 @@
 .control {
     margin: 16px;
+    flex-direction: column;
 }
 
 .input-container {

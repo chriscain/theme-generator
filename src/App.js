@@ -13,6 +13,7 @@ type State = {
     textColor: string,
     backgroundColor: string,
     horizontalMargin: number,
+    stoppedControls: string[],
 };
 
 export class App extends React.Component<Props, State> {
@@ -31,6 +32,7 @@ export class App extends React.Component<Props, State> {
             lineHeight: lineHeight,
             textColor: generateRandomHex(),
             horizontalMargin: generateRandomNumberInRange(32, 128),
+            stoppedControls: [],
         };
     }
 
@@ -67,27 +69,60 @@ export class App extends React.Component<Props, State> {
                     textColor={this.state.textColor}
                     horizontalMargin={this.state.horizontalMargin}
                     onChange={this.handleChange}
+                    onToggleActiveState={this.handleToggleActiveState}
+                    stoppedControls={this.state.stoppedControls}
                 />
             </div>
         );
     }
 
     changeStuff = () => {
-        const fontSize = generateRandomNumberInRange(11, 23);
-        const lineHeight = generateRandomNumberInRange(0, 6) + fontSize;
+        const fontSize = this.state.stoppedControls.includes('fontSize')
+            ? this.state.fontSize
+            : generateRandomNumberInRange(11, 23);
+        const generatedLineHeight = this.state.stoppedControls.includes(
+            'lineHeight'
+        )
+            ? this.state.lineHeight
+            : generateRandomNumberInRange(0, 6);
+        const realLineHeight = this.state.stoppedControls.includes('lineHeight')
+            ? this.state.lineHeight
+            : generatedLineHeight + fontSize;
 
         this.setState({
-            backgroundColor: generateRandomHex(),
+            backgroundColor: this.state.stoppedControls.includes(
+                'backgroundColor'
+            )
+                ? this.state.backgroundColor
+                : generateRandomHex(),
             fontSize: fontSize,
-            lineHeight: lineHeight,
-            textColor: generateRandomHex(),
-            horizontalMargin: generateRandomNumberInRange(32, 128),
+            lineHeight: realLineHeight,
+            textColor: this.state.stoppedControls.includes('textColor')
+                ? this.state.textColor
+                : generateRandomHex(),
+            horizontalMargin: this.state.stoppedControls.includes(
+                'horizontalMargin'
+            )
+                ? this.state.horizontalMargin
+                : generateRandomNumberInRange(32, 128),
         });
     };
 
     handleChange = (name: string, value: any) => {
         this.setState({[name]: value});
     };
+
+    handleToggleActiveState = (name: string, isStopped: boolean) => {
+        this.setState({
+            stoppedControls: isStopped
+                ? this.state.stoppedControls.concat(name)
+                : this.state.stoppedControls.filter(item => !item),
+        });
+    };
+
+    isControlStopped(name: string) {
+        return this.state.stoppedControls.includes('name');
+    }
 }
 
 function generateRandomHex() {
