@@ -1,0 +1,11 @@
+.controls {
+    position: fixed;
+    height: 150px;
+    width: 100%;
+    background-color: #fff;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    padding: 32px;
+    box-sizing: border-box;
+}
