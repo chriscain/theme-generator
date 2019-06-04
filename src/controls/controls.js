@@ -11,6 +11,7 @@ type Props = {
     lineHeight: number,
     fontSize: number,
     horizontalMargin: number,
+    verticalMargin: number,
     onChange: (key: string, value: any) => void,
     stoppedControls: string[],
     onToggleActiveState: (name: string, newActiveState: boolean) => void,
@@ -20,7 +21,6 @@ export class Controls extends React.Component<Props> {
     render() {
         return (
             <div className={styles.controls}>
-                <h3>Control panel</h3>
                 <Control
                     name="interval"
                     label="Interval"
@@ -39,7 +39,7 @@ export class Controls extends React.Component<Props> {
                     )}
                     onChange={this.handleChange}
                     value={this.props.backgroundColor}
-                    prefix="#"
+                    isColorPicker={true}
                 />
                 <Control
                     name="textColor"
@@ -48,7 +48,7 @@ export class Controls extends React.Component<Props> {
                     isStopped={this.props.stoppedControls.includes('textColor')}
                     onChange={this.handleChange}
                     value={this.props.textColor}
-                    suffix="px"
+                    isColorPicker={true}
                 />
                 <Control
                     name="lineHeight"
@@ -59,7 +59,7 @@ export class Controls extends React.Component<Props> {
                     )}
                     onChange={this.handleChange}
                     value={this.props.lineHeight}
-                    suffix="px"
+                    isPixelValue={true}
                 />
                 <Control
                     name="fontSize"
@@ -68,7 +68,18 @@ export class Controls extends React.Component<Props> {
                     isStopped={this.props.stoppedControls.includes('fontSize')}
                     onChange={this.handleChange}
                     value={this.props.fontSize}
-                    suffix="px"
+                    isPixelValue={true}
+                />
+                <Control
+                    name="verticalMargin"
+                    label="Vertical margin"
+                    onToggleActiveState={this.handleToggleActiveState}
+                    isStopped={this.props.stoppedControls.includes(
+                        'verticalMargin'
+                    )}
+                    onChange={this.handleChange}
+                    value={this.props.verticalMargin}
+                    isPixelValue={true}
                 />
                 <Control
                     name="horizontalMargin"
@@ -79,7 +90,7 @@ export class Controls extends React.Component<Props> {
                     )}
                     onChange={this.handleChange}
                     value={this.props.horizontalMargin}
-                    suffix="px"
+                    isPixelValue={true}
                 />
             </div>
         );

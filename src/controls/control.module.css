@@ -4,5 +4,20 @@
 }
 
 .input-container {
+    position: relative;
     display: flex;
+}
+
+.color-picker-container {
+    position: absolute;
+    background-color: white;
+    bottom: 40px;
+}
+
+.color-picker-blurrer {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
 }

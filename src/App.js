@@ -32,6 +32,7 @@ export class App extends React.Component<Props, State> {
             lineHeight: lineHeight,
             textColor: generateRandomHex(),
             horizontalMargin: generateRandomNumberInRange(32, 128),
+            verticalMargin: 32,
             stoppedControls: [],
         };
     }
@@ -60,6 +61,7 @@ export class App extends React.Component<Props, State> {
                     lineHeight={this.state.lineHeight}
                     textColor={this.state.textColor}
                     horizontalMargin={this.state.horizontalMargin}
+                    verticalMargin={this.state.verticalMargin}
                 />
                 <Controls
                     interval={this.state.interval}
@@ -68,6 +70,7 @@ export class App extends React.Component<Props, State> {
                     lineHeight={this.state.lineHeight}
                     textColor={this.state.textColor}
                     horizontalMargin={this.state.horizontalMargin}
+                    verticalMargin={this.state.verticalMargin}
                     onChange={this.handleChange}
                     onToggleActiveState={this.handleToggleActiveState}
                     stoppedControls={this.state.stoppedControls}
@@ -105,6 +108,11 @@ export class App extends React.Component<Props, State> {
             )
                 ? this.state.horizontalMargin
                 : generateRandomNumberInRange(32, 128),
+            verticalMargin: this.state.stoppedControls.includes(
+                'verticalMargin'
+            )
+                ? this.state.verticalMargin
+                : 32,
         });
     };
 

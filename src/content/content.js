@@ -9,6 +9,7 @@ type Props = {
     fontSize: number,
     lineHeight: number,
     horizontalMargin: number,
+    verticalMargin: number,
 };
 
 export class Content extends React.Component<Props> {
@@ -18,7 +19,9 @@ export class Content extends React.Component<Props> {
         };
 
         const contentContainerStyles = {
-            margin: `32px ${this.props.horizontalMargin}px`,
+            margin: `${this.props.verticalMargin}px ${
+                this.props.horizontalMargin
+            }px`,
         };
 
         const textStyles = {
