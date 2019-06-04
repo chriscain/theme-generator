@@ -1,0 +1,20 @@
+{
+  "folders": [
+    {
+      "path": ".",
+      "folder_exclude_patterns": [".cache", "node_modules"]
+    }
+  ],
+  "settings": {
+    "js_prettier": {
+      "auto_format_on_save": true,
+      "auto_format_on_save_excludes": [],
+      "allow_inline_formatting": false,
+      "custom_file_extensions": [],
+      "additional_cli_args": {
+          "--config": ".prettierrc",
+          "--config-precedence": "prefer-file"
+      }
+    }
+  }
+}
