@@ -19,6 +19,7 @@ type State = {
     stoppedControls: string[],
     isLoading: boolean,
     fonts: Object[],
+    errorMessage: ?string,
 };
 
 export class App extends React.Component<Props, State> {
@@ -41,31 +42,35 @@ export class App extends React.Component<Props, State> {
             headerFont: generateRandomFont(),
             bodyFont: generateRandomFont(),
             stoppedControls: [],
-            isLoading: false,
+            isLoading: true,
             fonts: [],
+            errorMessage: null,
         };
     }
 
     componentDidMount() {
         this.interval = setInterval(this.changeStuff, this.state.interval);
 
-        // fetch(
-        //     'https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBjnzN-_nm1saTaG_pXEDx3TFlSAXESdt8'
-        // )
-        //     .then(function(response) {
-        //         return response.json();
-        //     })
-        //     .then(
-        //         (response: any) => {
-        //             this.setState({
-        //                 isLoading: false,
-        //                 fonts: response.items,
-        //             });
-        //         },
-        //         err => {
-        //             console.log(err);
-        //         }
-        //     );
+        fetch(
+            'https://www.googleapis.com/webfonts/v1/webfonts?key=AIzaSyBjnzN-_nm1saTaG_pXEDx3TFlSAXESdt8'
+        )
+            .then(function(response) {
+                return response.json();
+            })
+            .then(
+                (response: any) => {
+                    this.setState({
+                        isLoading: false,
+                        fonts: response.items,
+                    });
+                },
+                err => {
+                    console.log(err);
+                    this.setState({
+                        errorMessage: err,
+                    });
+                }
+            );
     }
 
     componentDidUpdate(prevProps: Props, prevState: State) {
@@ -82,6 +87,10 @@ export class App extends React.Component<Props, State> {
     render() {
         if (this.state.isLoading) {
             return null;
+        }
+
+        if (this.state.errorMessage) {
+            return <div>{this.state.errorMessage}</div>;
         }
 
         return (
@@ -176,31 +185,31 @@ function generateRandomFont() {
     return generateRandomHex();
 }
 
-// function generate(fonts) {
-//     console.lo;
-//     this.headingFont = this.fontFilter(this.headingCategory);
-//     this.bodyFont = this.fontFilter(this.bodyCategory);
+function generate(fonts) {
+    console.lo;
+    this.headingFont = this.fontFilter(this.headingCategory);
+    this.bodyFont = this.fontFilter(this.bodyCategory);
 
-//     const googleUrl = 'https://fonts.google.com/specimen/';
-//     this.headingFontUrl =
-//         googleUrl + this.headingFont.family.replace(/ /g, '+');
-//     this.bodyFontUrl = googleUrl + this.bodyFont.family.replace(/ /g, '+');
-//     if (combinedFont == null) {
-//         const link = document.createElement('link');
-//         link.id = 'combined-font';
-//         link.href = `https://fonts.googleapis.com/css?family=${this.headingFont.family.replace(
-//             / /g,
-//             '+'
-//         )}|${this.bodyFont.family.replace(/ /g, '+')}`;
-//         link.rel = 'stylesheet';
-//         document.head.appendChild(link);
-//     } else {
-//         combinedFont.href = `https://fonts.googleapis.com/css?family=${this.headingFont.family.replace(
-//             / /g,
-//             '+'
-//         )}|${this.bodyFont.family.replace(/ /g, '+')}`;
-//     }
-// }
+    const googleUrl = 'https://fonts.google.com/specimen/';
+    this.headingFontUrl =
+        googleUrl + this.headingFont.family.replace(/ /g, '+');
+    this.bodyFontUrl = googleUrl + this.bodyFont.family.replace(/ /g, '+');
+    if (combinedFont == null) {
+        const link = document.createElement('link');
+        link.id = 'combined-font';
+        link.href = `https://fonts.googleapis.com/css?family=${this.headingFont.family.replace(
+            / /g,
+            '+'
+        )}|${this.bodyFont.family.replace(/ /g, '+')}`;
+        link.rel = 'stylesheet';
+        document.head.appendChild(link);
+    } else {
+        combinedFont.href = `https://fonts.googleapis.com/css?family=${this.headingFont.family.replace(
+            / /g,
+            '+'
+        )}|${this.bodyFont.family.replace(/ /g, '+')}`;
+    }
+}
 
 function generateRandomHex() {
     return Math.floor(Math.random() * 16777215).toString(16);
