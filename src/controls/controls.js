@@ -1,10 +1,15 @@
 /* @flow */
 
 import React from 'react';
-import styles from './controls.module.css';
+
+import type {Font, FontCategory} from '../App';
 import {Control} from './control';
+import {FontControls} from './font-controls';
+
+import styles from './controls.module.css';
 
 type Props = {
+    // controls
     interval: number,
     backgroundColor: string,
     textColor: string,
@@ -12,9 +17,15 @@ type Props = {
     fontSize: number,
     horizontalMargin: number,
     verticalMargin: number,
-    headerFont: string,
-    bodyFont: string,
-    onChange: (key: string, value: any) => void,
+
+    // fonts
+    fontCategories: FontCategory[],
+    fontHeaderCategory: FontCategory,
+    fontHeader: Font,
+    fontBodyCategory: FontCategory,
+    fontBody: Font,
+
+    onChange: (key: string, value: string | number) => void,
     stoppedControls: string[],
     onToggleActiveState: (name: string, newActiveState: boolean) => void,
 };
@@ -95,28 +106,33 @@ export class Controls extends React.Component<Props> {
                     isPixelValue={true}
                 />
                 <Control
-                    name="headerFont"
+                    name="fontHeader"
                     label="Header font"
                     onToggleActiveState={this.handleToggleActiveState}
                     isStopped={this.props.stoppedControls.includes(
-                        'headerFont'
+                        'fontHeader'
                     )}
-                    onChange={this.handleChange}
-                    value={this.props.headerFont}
+                    value={this.props.fontHeader.family}
                 />
                 <Control
-                    name="bodyFont"
+                    name="fontBody"
                     label="Body font"
                     onToggleActiveState={this.handleToggleActiveState}
-                    isStopped={this.props.stoppedControls.includes('bodyFont')}
+                    isStopped={this.props.stoppedControls.includes('fontBody')}
+                    value={this.props.fontBody.family}
+                />
+
+                <FontControls
+                    fontCategories={this.props.fontCategories}
+                    fontHeaderCategory={this.props.fontHeaderCategory}
+                    fontBodyCategory={this.props.fontBodyCategory}
                     onChange={this.handleChange}
-                    value={this.props.bodyFont}
                 />
             </div>
         );
     }
 
-    handleChange = (name: string, value: any) => {
+    handleChange = (name: string, value: string | number) => {
         this.props.onChange(name, value);
     };
 

@@ -3,6 +3,8 @@
 import React from 'react';
 import styles from './content.module.css';
 
+import type {Font} from '../App';
+
 type Props = {
     backgroundColor: string,
     textColor: string,
@@ -10,9 +12,43 @@ type Props = {
     lineHeight: number,
     horizontalMargin: number,
     verticalMargin: number,
+    fontBody: Font,
+    fontHeader: Font,
 };
 
 export class Content extends React.Component<Props> {
+    componentWillReceiveProps(nextProps: Props) {
+        if (
+            nextProps.fontBody &&
+            this.props.fontBody &&
+            nextProps.fontHeader &&
+            this.props.fontHeader &&
+            (nextProps.fontBody.family !== this.props.fontBody.family ||
+                nextProps.fontHeader.family !== this.props.fontHeader.family)
+        ) {
+            const combinedFont = document.head.querySelector('#combined-font');
+            const googleUrl = 'https://fonts.google.com/specimen/';
+            const headingFontUrl =
+                googleUrl + nextProps.fontBody.family.replace(/ /g, '+');
+            const bodyFontUrl =
+                googleUrl + nextProps.fontBody.family.replace(/ /g, '+');
+            if (combinedFont == null) {
+                const link = document.createElement('link');
+                link.id = 'combined-font';
+                link.href = `https://fonts.googleapis.com/css?family=${nextProps.fontHeader.family.replace(
+                    / /g,
+                    '+'
+                )}|${nextProps.fontBody.family.replace(/ /g, '+')}`;
+                link.rel = 'stylesheet';
+                document.head.appendChild(link);
+            } else {
+                combinedFont.href = `https://fonts.googleapis.com/css?family=${nextProps.fontHeader.family.replace(
+                    / /g,
+                    '+'
+                )}|${nextProps.fontBody.family.replace(/ /g, '+')}`;
+            }
+        }
+    }
     render() {
         const containerStyles = {
             backgroundColor: `#${this.props.backgroundColor}`,
@@ -28,6 +64,7 @@ export class Content extends React.Component<Props> {
             color: `#${this.props.textColor}`,
             fontSize: `${this.props.fontSize}px`,
             lineHeight: `${this.props.lineHeight}px`,
+            fontFamily: this.props.fontBody.family,
         };
 
         const h1Styles = {
@@ -35,12 +72,14 @@ export class Content extends React.Component<Props> {
             fontSize: `${this.props.fontSize + 7}px`,
             lineHeight: `${this.props.lineHeight + 9}px`,
             fontWeight: 'bold',
+            fontFamily: this.props.fontHeader.family,
         };
 
         const h2Styles = {
             ...textStyles,
             fontSize: `${this.props.fontSize + 3}px`,
             lineHeight: `${this.props.lineHeight + 5}px`,
+            fontFamily: this.props.fontHeader.family,
         };
 
         return (

@@ -5,6 +5,27 @@ import styles from './App.module.css';
 import {Content} from './content/content';
 import {Controls} from './controls/controls';
 
+export type FontCategory =
+    | 'sans-serif'
+    | 'serif'
+    | 'monospace'
+    | 'display'
+    | 'handwriting';
+
+export type Font = {
+    category: FontCategory,
+    family: string,
+    files: {
+        italic: string,
+        regular: string,
+    },
+    kind: string,
+    lastModified: string,
+    subsets: string[],
+    variants: string[],
+    version: string,
+};
+
 type Props = {};
 type State = {
     interval: number,
@@ -14,12 +35,17 @@ type State = {
     backgroundColor: string,
     horizontalMargin: number,
     verticalMargin: number,
-    headerFont: string,
-    bodyFont: string,
+    fontHeader: string,
+    fontBody: string,
     stoppedControls: string[],
     isLoading: boolean,
     fonts: Object[],
     errorMessage: ?string,
+    fontCategories: FontCategory[],
+    fontHeaderCategory: FontCategory,
+    fontHeader: ?Font,
+    fontBodyCategory: FontCategory,
+    fontBody: ?Font,
 };
 
 export class App extends React.Component<Props, State> {
@@ -39,12 +65,15 @@ export class App extends React.Component<Props, State> {
             textColor: generateRandomHex(),
             horizontalMargin: generateRandomNumberInRange(32, 128),
             verticalMargin: 32,
-            headerFont: generateRandomFont(),
-            bodyFont: generateRandomFont(),
             stoppedControls: [],
             isLoading: true,
             fonts: [],
             errorMessage: null,
+            fontCategories: [],
+            fontHeader: null,
+            fontHeaderCategory: 'sans-serif',
+            fontBody: null,
+            fontBodyCategory: 'serif',
         };
     }
 
@@ -58,14 +87,24 @@ export class App extends React.Component<Props, State> {
                 return response.json();
             })
             .then(
-                (response: any) => {
+                (response: {items: Font[]}) => {
+                    const allFonts = response.items;
+                    const fontCategories = allFonts.reduce(
+                        (uniqueCategories: FontCategory[], item) => {
+                            return uniqueCategories.includes(item.category)
+                                ? uniqueCategories
+                                : uniqueCategories.concat([item.category]);
+                        },
+                        []
+                    );
+
                     this.setState({
                         isLoading: false,
                         fonts: response.items,
+                        fontCategories: fontCategories,
                     });
                 },
                 err => {
-                    console.log(err);
                     this.setState({
                         errorMessage: err,
                     });
@@ -93,32 +132,41 @@ export class App extends React.Component<Props, State> {
             return <div>{this.state.errorMessage}</div>;
         }
 
-        return (
-            <div className={styles.container}>
-                <Content
-                    fontSize={this.state.fontSize}
-                    backgroundColor={this.state.backgroundColor}
-                    lineHeight={this.state.lineHeight}
-                    textColor={this.state.textColor}
-                    horizontalMargin={this.state.horizontalMargin}
-                    verticalMargin={this.state.verticalMargin}
-                />
-                <Controls
-                    interval={this.state.interval}
-                    fontSize={this.state.fontSize}
-                    backgroundColor={this.state.backgroundColor}
-                    lineHeight={this.state.lineHeight}
-                    textColor={this.state.textColor}
-                    horizontalMargin={this.state.horizontalMargin}
-                    verticalMargin={this.state.verticalMargin}
-                    headerFont={this.state.headerFont}
-                    bodyFont={this.state.bodyFont}
-                    onChange={this.handleChange}
-                    onToggleActiveState={this.handleToggleActiveState}
-                    stoppedControls={this.state.stoppedControls}
-                />
-            </div>
-        );
+        if (this.state.fontBody && this.state.fontHeader) {
+            return (
+                <div className={styles.container}>
+                    <Content
+                        fontSize={this.state.fontSize}
+                        backgroundColor={this.state.backgroundColor}
+                        lineHeight={this.state.lineHeight}
+                        textColor={this.state.textColor}
+                        horizontalMargin={this.state.horizontalMargin}
+                        verticalMargin={this.state.verticalMargin}
+                        fontHeader={this.state.fontHeader}
+                        fontBody={this.state.fontBody}
+                    />
+                    <Controls
+                        interval={this.state.interval}
+                        fontSize={this.state.fontSize}
+                        backgroundColor={this.state.backgroundColor}
+                        lineHeight={this.state.lineHeight}
+                        textColor={this.state.textColor}
+                        horizontalMargin={this.state.horizontalMargin}
+                        verticalMargin={this.state.verticalMargin}
+                        fontCategories={this.state.fontCategories}
+                        fontHeaderCategory={this.state.fontHeaderCategory}
+                        fontBodyCategory={this.state.fontBodyCategory}
+                        fontBody={this.state.fontBody}
+                        fontHeader={this.state.fontHeader}
+                        onChange={this.handleChange}
+                        onToggleActiveState={this.handleToggleActiveState}
+                        stoppedControls={this.state.stoppedControls}
+                    />
+                </div>
+            );
+        }
+
+        return null;
     }
 
     changeStuff = () => {
@@ -155,24 +203,30 @@ export class App extends React.Component<Props, State> {
             )
                 ? this.state.verticalMargin
                 : 32,
-            headerFont: this.state.stoppedControls.includes('headerFont')
-                ? this.state.headerFont
-                : generateRandomFont(),
-            bodyFont: this.state.stoppedControls.includes('bodyFont')
-                ? this.state.bodyFont
-                : generateRandomFont(),
+            fontHeader: this.state.stoppedControls.includes('fontHeader')
+                ? this.state.fontHeader
+                : generateRandomFont(
+                      this.state.fonts,
+                      this.state.fontHeaderCategory
+                  ),
+            fontBody: this.state.stoppedControls.includes('fontBody')
+                ? this.state.fontBody
+                : generateRandomFont(
+                      this.state.fonts,
+                      this.state.fontBodyCategory
+                  ),
         });
     };
 
-    handleChange = (name: string, value: any) => {
+    handleChange = (name: string, value: string | number) => {
         this.setState({[name]: value});
     };
 
     handleToggleActiveState = (name: string, isStopped: boolean) => {
         this.setState({
             stoppedControls: isStopped
-                ? this.state.stoppedControls.concat(name)
-                : this.state.stoppedControls.filter(item => !item),
+                ? this.state.stoppedControls.concat([name])
+                : this.state.stoppedControls.filter(item => item !== name),
         });
     };
 
@@ -181,34 +235,16 @@ export class App extends React.Component<Props, State> {
     }
 }
 
-function generateRandomFont() {
-    return generateRandomHex();
-}
+function generateRandomFont(fonts: Font[], category: FontCategory) {
+    const fontsInCategory = fonts.filter(font => {
+        return font.category === category;
+    });
 
-function generate(fonts) {
-    console.lo;
-    this.headingFont = this.fontFilter(this.headingCategory);
-    this.bodyFont = this.fontFilter(this.bodyCategory);
+    const randomIndex = Math.floor(
+        Math.random() * (fontsInCategory.length - 1) + 1
+    );
 
-    const googleUrl = 'https://fonts.google.com/specimen/';
-    this.headingFontUrl =
-        googleUrl + this.headingFont.family.replace(/ /g, '+');
-    this.bodyFontUrl = googleUrl + this.bodyFont.family.replace(/ /g, '+');
-    if (combinedFont == null) {
-        const link = document.createElement('link');
-        link.id = 'combined-font';
-        link.href = `https://fonts.googleapis.com/css?family=${this.headingFont.family.replace(
-            / /g,
-            '+'
-        )}|${this.bodyFont.family.replace(/ /g, '+')}`;
-        link.rel = 'stylesheet';
-        document.head.appendChild(link);
-    } else {
-        combinedFont.href = `https://fonts.googleapis.com/css?family=${this.headingFont.family.replace(
-            / /g,
-            '+'
-        )}|${this.bodyFont.family.replace(/ /g, '+')}`;
-    }
+    return fontsInCategory[randomIndex];
 }
 
 function generateRandomHex() {

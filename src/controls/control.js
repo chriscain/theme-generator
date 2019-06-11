@@ -2,15 +2,16 @@
 
 import React from 'react';
 import {SketchPicker} from 'react-color';
+
 import styles from './control.module.css';
 
 type Props = {
     name: string,
     label: string,
-    onChange: (name: string, value: string | number) => void,
+    onChange?: (name: string, value: string | number) => void,
     value: string | number,
     isStopped: boolean,
-    onToggleActiveState: (name: string, newActiveState: boolean) => any,
+    onToggleActiveState: (name: string, newActiveState: boolean) => void,
 
     // Optional props
     isPixelValue?: boolean,
@@ -37,7 +38,7 @@ export class Control extends React.Component<Props, State> {
                 <div className={styles['input-container']}>
                     {this.props.isColorPicker ? <span>#</span> : undefined}
                     <input
-                        style={{width: 80}}
+                        style={{width: 50}}
                         onFocus={this.handleFocus}
                         name={this.props.name}
                         value={this.props.value}
@@ -73,6 +74,7 @@ export class Control extends React.Component<Props, State> {
     }
 
     handleColorChange = (color: {hex: string}) => {
+        // $FlowIgnore
         this.props.onChange(this.props.name, color.hex.slice(1, 7));
     };
 
@@ -80,7 +82,10 @@ export class Control extends React.Component<Props, State> {
         const value = this.props.isPixelValue
             ? Number(e.target.value)
             : e.target.value;
-        this.props.onChange(this.props.name, value);
+
+        if (this.props.onChange) {
+            this.props.onChange(this.props.name, value);
+        }
     };
 
     handleFocus = () => {
