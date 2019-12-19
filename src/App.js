@@ -58,7 +58,7 @@ export class App extends React.Component<Props, State> {
         const lineHeight = generateRandomNumberInRange(0, 6) + fontSize;
 
         this.state = {
-            interval: 1000,
+            interval: 2000,
             backgroundColor: generateRandomHex(),
             fontSize: fontSize,
             lineHeight: lineHeight,
