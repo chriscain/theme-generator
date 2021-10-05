@@ -27,11 +27,7 @@ export class Content extends React.Component<Props> {
                 nextProps.fontHeader.family !== this.props.fontHeader.family)
         ) {
             const combinedFont = document.head.querySelector('#combined-font');
-            const googleUrl = 'https://fonts.google.com/specimen/';
-            const headingFontUrl =
-                googleUrl + nextProps.fontBody.family.replace(/ /g, '+');
-            const bodyFontUrl =
-                googleUrl + nextProps.fontBody.family.replace(/ /g, '+');
+
             if (combinedFont == null) {
                 const link = document.createElement('link');
                 link.id = 'combined-font';
